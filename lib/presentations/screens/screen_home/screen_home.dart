@@ -48,7 +48,7 @@ class ScreenHome extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const ScreenSettings(),
+                      builder: (context) => ScreenSettings(),
                     ),
                   );
                 },

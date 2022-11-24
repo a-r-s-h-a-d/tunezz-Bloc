@@ -1,26 +1,23 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tunezz_pro/application/screen_most/screen_most_bloc.dart';
 import 'package:tunezz_pro/constants/color_palette/background_colors.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 import 'package:tunezz_pro/functions/mostplayed.dart';
 import 'package:tunezz_pro/presentations/widgets/music_list_tile.dart';
 
-class MostlyPlayed extends StatefulWidget {
-  const MostlyPlayed({
+class MostlyPlayed extends StatelessWidget {
+  MostlyPlayed({
     required this.audioPlayer,
     super.key,
   });
   final AssetsAudioPlayer audioPlayer;
 
-  @override
-  State<MostlyPlayed> createState() => _MostlyPlayedState();
-}
-
-class _MostlyPlayedState extends State<MostlyPlayed> {
-  Box<Songs> songBox = getSongBox();
-  Box<List> playlistBox = getPlaylistBox();
+  final Box<Songs> songBox = getSongBox();
+  final Box<List> playlistBox = getPlaylistBox();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +43,8 @@ class _MostlyPlayedState extends State<MostlyPlayed> {
         actions: [
           IconButton(
               onPressed: () {
+                BlocProvider.of<ScreenMostBloc>(context)
+                    .add(const GetMostSongList());
                 MostPlayed.removefromMostplayedList();
               },
               icon: const Icon(Icons.auto_delete)),
@@ -55,16 +54,9 @@ class _MostlyPlayedState extends State<MostlyPlayed> {
         decoration: BoxDecoration(
           gradient: bgColor(),
         ),
-        child: ValueListenableBuilder(
-          valueListenable: playlistBox.listenable(),
-          builder: (
-            BuildContext context,
-            Box<List> value,
-            Widget? child,
-          ) {
-            List<Songs> songList =
-                playlistBox.get('MostPlayed')!.toList().cast<Songs>();
-            return (songList.isEmpty)
+        child: BlocBuilder<ScreenMostBloc, ScreenMostState>(
+          builder: (context, state) {
+            return state.mostSongList.isEmpty
                 ? const Center(
                     child: Text(
                       'No Songs Found',
@@ -76,12 +68,12 @@ class _MostlyPlayedState extends State<MostlyPlayed> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: songList.length,
+                    itemCount: state.mostSongList.length,
                     itemBuilder: (context, index) {
                       return ListTileMusic(
-                        songList: songList,
+                        songList: state.mostSongList,
                         index: index,
-                        audioPlayer: widget.audioPlayer,
+                        audioPlayer: audioPlayer,
                       );
                     },
                   );

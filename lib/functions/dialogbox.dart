@@ -39,8 +39,7 @@ showPlaylistAddAlertBox(BuildContext context) {
                 final key = getPlaylistBox().keys.toList();
                 if (value == null || value.isEmpty) {
                   return 'Field is Empty';
-                }
-                if (key.contains(value)) {
+                } else if (key.contains(value)) {
                   return '$value is Already existed';
                 }
                 return null;
@@ -102,29 +101,13 @@ showPlaylistAddAlertBox(BuildContext context) {
       });
 }
 
-//Playlist---->Rename
-
-// class PlaylistRenameAlertBox extends StatefulWidget {
-//   const PlaylistRenameAlertBox({super.key});
-
-//   @override
-//   State<PlaylistRenameAlertBox> createState() => _PlaylistRenameAlertBoxState();
-// }
-
-// class _PlaylistRenameAlertBoxState extends State<PlaylistRenameAlertBox> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
-
 showPlaylistRenameAlertBox(BuildContext context, playlistname) {
   TextEditingController textController =
       TextEditingController(text: playlistname);
   String newPlaylistName = playlistname;
   Box<List> playlistBox = getPlaylistBox();
   //List<Songs> songList = [];
-  final keys = playlistBox.keys.toList();
+  //final keys = playlistBox.keys.toList();
   final formKey = GlobalKey<FormState>();
   return showDialog(
     context: context,
@@ -142,10 +125,10 @@ showPlaylistRenameAlertBox(BuildContext context, playlistname) {
         ),
         content: TextFormField(
           validator: (value) {
+            final keys = playlistBox.keys.toList();
             if (value == null || value.isEmpty) {
               return 'field is empty';
-            }
-            if (keys.contains(keys)) {
+            } else if (keys.contains(value)) {
               return '$value is already existed in playlist';
             }
             return null;
@@ -191,6 +174,7 @@ showPlaylistRenameAlertBox(BuildContext context, playlistname) {
                       playlistBox.get(playlistname)!.toList().cast<Songs>();
                   await playlistBox.put(newPlaylistName, newPlaylistSongs);
                   await playlistBox.delete(playlistname);
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
                 icon: const Icon(

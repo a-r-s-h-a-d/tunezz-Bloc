@@ -60,10 +60,13 @@ class PlaylistTab extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
                       builder: (ctx) => MostlyPlayed(
-                            audioPlayer: audioPlayer,
-                          )));
+                        audioPlayer: audioPlayer,
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.2,
@@ -94,7 +97,7 @@ class PlaylistTab extends StatelessWidget {
           InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => const ScreenFavorites(),
+                builder: (ctx) => ScreenFavorites(),
               ));
             },
             child: Container(

@@ -1,12 +1,14 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:tunezz_pro/application/screen_favorite/screen_favorite_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/functions/dialogbox.dart';
 import 'package:tunezz_pro/functions/favorites.dart';
 import 'package:tunezz_pro/presentations/widgets/miniplayer_tile.dart';
 
-class ListTileMusic extends StatefulWidget {
+class ListTileMusic extends StatelessWidget {
   const ListTileMusic({
     required this.audioPlayer,
     required this.songList,
@@ -16,16 +18,12 @@ class ListTileMusic extends StatefulWidget {
   final AssetsAudioPlayer audioPlayer;
   final List<Songs> songList;
   final int index;
-  @override
-  State<ListTileMusic> createState() => _ListTileMusicState();
-}
 
-class _ListTileMusicState extends State<ListTileMusic> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: QueryArtworkWidget(
-        id: int.parse(widget.songList[widget.index].id),
+        id: int.parse(songList[index].id),
         type: ArtworkType.AUDIO,
         nullArtworkWidget: Container(
           decoration: const BoxDecoration(
@@ -38,7 +36,7 @@ class _ListTileMusicState extends State<ListTileMusic> {
         ),
       ),
       title: Text(
-        widget.songList[widget.index].title,
+        songList[index].title,
         style: const TextStyle(
             fontFamily: "acme",
             color: Colors.white,
@@ -46,9 +44,9 @@ class _ListTileMusicState extends State<ListTileMusic> {
             fontSize: 17),
       ),
       subtitle: Text(
-        widget.songList[widget.index].artist == "<unknown>"
+        songList[index].artist == "<unknown>"
             ? "Unknown Artist"
-            : widget.songList[widget.index].artist,
+            : songList[index].artist,
         style: const TextStyle(
             fontFamily: "lato",
             color: Colors.white,
@@ -66,17 +64,17 @@ class _ListTileMusicState extends State<ListTileMusic> {
             child: Center(
               child: IconButton(
                 onPressed: () {
+                  BlocProvider.of<ScreenFavoriteBloc>(context)
+                      .add(const GetFavoriteList());
                   FavFunction.addtoFavorites(
-                      context: context, id: widget.songList[widget.index].id);
-                  // id: audioList[widget.index].metas.id!);
-
-                  setState(() {
-                    FavFunction.isFav(id: widget.songList[widget.index].id);
-                  });
+                    context: context,
+                    id: songList[index].id,
+                  );
+                  FavFunction.isFav(id: songList[index].id);
                   Navigator.of(context).pop();
                 },
                 icon: Icon(
-                  FavFunction.isFav(id: widget.songList[widget.index].id),
+                  FavFunction.isFav(id: songList[index].id),
                   color: Colors.white,
                   size: 35,
                 ),
@@ -88,8 +86,7 @@ class _ListTileMusicState extends State<ListTileMusic> {
               child: IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  showAddtoplaylistBox(
-                      context, widget.songList[widget.index].id);
+                  showAddtoplaylistBox(context, songList[index].id);
                 },
                 icon: const Icon(
                   Icons.playlist_add,
@@ -118,9 +115,9 @@ class _ListTileMusicState extends State<ListTileMusic> {
                   color: Colors.blueGrey,
                 ),
                 child: ListTileMiniplayer(
-                  audioPlayer: widget.audioPlayer,
-                  songList: widget.songList,
-                  index: widget.index,
+                  audioPlayer: audioPlayer,
+                  songList: songList,
+                  index: index,
                 ),
               ),
             );

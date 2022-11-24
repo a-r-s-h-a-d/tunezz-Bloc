@@ -1,7 +1,9 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee_widget/marquee_widget.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:tunezz_pro/application/screen_recent/screen_recent_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/functions/recents.dart';
 import 'package:tunezz_pro/presentations/screens/screen_nowplaying/screen_nowplaying.dart';
@@ -66,6 +68,7 @@ class ListTileMiniplayer extends StatelessWidget {
     return audioPlayer.builderCurrent(
       builder: (BuildContext context, Playing playing) {
         Audio myAudio = find(audioList, playing.audio.assetAudioPath);
+        BlocProvider.of<ScreenRecentBloc>(context).add(const GetRecentList());
         Recents.addtoRecent(
           context: context,
           id: int.parse(myAudio.metas.id!).toString(),

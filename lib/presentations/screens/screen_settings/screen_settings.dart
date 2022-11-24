@@ -7,33 +7,11 @@ import 'package:tunezz_pro/constants/text/privacy_policy.dart';
 import 'package:tunezz_pro/presentations/screens/screen_settings/widgets/settings_tile.dart';
 import 'package:tunezz_pro/constants/text/terms&conditions.dart';
 
-class ScreenSettings extends StatefulWidget {
-  const ScreenSettings({super.key});
+class ScreenSettings extends StatelessWidget {
+  ScreenSettings({super.key});
 
-  @override
-  State<ScreenSettings> createState() => _ScreenSettingsState();
-}
-
-class _ScreenSettingsState extends State<ScreenSettings> {
   final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId('0');
-  bool? isSwitched = false;
-  // @override
-  // void initState() {
-  //   _loadData();
-  //   super.initState();
-  // }
-
-  // _loadData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     isSwitched = prefs.getBool("isSwitched");
-  //   });
-  // }
-
-  // _savebool() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setBool("isSwitched", isSwitched!);
-  // }
+  final bool? isSwitched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -104,23 +82,6 @@ class _ScreenSettingsState extends State<ScreenSettings> {
                     child: const SettingsListTile(
                         labelText: 'Share App', icon: Icons.share),
                   ),
-                  // SettingsListTile(
-                  //   labelText: 'Notification',
-                  //   icon: Icons.notifications,
-                  //   trailingwidget: Switch(
-                  //     activeColor: Colors.blue,
-                  //     value: isSwitched!,
-                  //     onChanged: (value) {
-                  //       setState(() {
-                  //         isSwitched = value;
-                  //         // _savebool();
-                  //         isSwitched!
-                  //             ? audioPlayer.showNotification = true
-                  //             : audioPlayer.showNotification = false;
-                  //       });
-                  //     },
-                  //   ),
-                  // ),
                   InkWell(
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ScreenPrivacyConditions(

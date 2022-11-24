@@ -12,7 +12,7 @@ class MostPlayed {
         playlistBox.get('MostPlayed')!.toList().cast<Songs>();
     final mostplayedSongs =
         deviceSongs.firstWhere((song) => song.id.contains(id));
-    if (mostplayedList.length >= 10) {
+    if (mostplayedList.length > 10) {
       mostplayedList.removeLast();
     }
     if (mostplayedSongs.playedCount! >= 3) {

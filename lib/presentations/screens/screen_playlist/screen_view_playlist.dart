@@ -65,7 +65,6 @@ class ViewPlaylist extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //log('clicked');
           showModalBottomSheet(
               context: context,
               builder: (builder) {

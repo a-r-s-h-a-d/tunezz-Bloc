@@ -1,4 +1,6 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tunezz_pro/application/screen_most/screen_most_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 import 'package:tunezz_pro/functions/mostplayed.dart';
@@ -17,6 +19,7 @@ class Recents {
     recentSong.playedCount = recentSong.playedCount! + 1;
     //                      Calling MostPlayed
     MostPlayed.addtoMostPlayed(context: context, id: id);
+    BlocProvider.of<ScreenMostBloc>(context).add(const GetMostSongList());
     // <--------------------------------------------------------------------->
     if (recentSongsList.length > 10) {
       recentSongsList.removeLast();

@@ -16,9 +16,7 @@ class FavFunction {
     Songs favSong = sortedSongs.firstWhere((song) => song.id.contains(id));
     if (favSongList.where((song) => song.id == favSong.id).isEmpty) {
       favSongList.add(favSong);
-      // log('3');
       playlistBox.put('Favorites', favSongList);
-      // log('4');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${favSong.title} added to favorites'),
@@ -28,11 +26,8 @@ class FavFunction {
         ),
       );
     } else {
-      // log('5');
       favSongList.removeWhere((song) => song.id == favSong.id);
-      // log('6');
       playlistBox.put('Favorites', favSongList);
-      // log('7');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${favSong.title} removed from favorites'),
         backgroundColor: Colors.red,
