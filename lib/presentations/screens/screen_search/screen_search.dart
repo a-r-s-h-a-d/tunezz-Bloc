@@ -1,43 +1,28 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tunezz_pro/application/search_bloc/screen_search_bloc.dart';
 import 'package:tunezz_pro/constants/color_palette/background_colors.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 import 'package:tunezz_pro/presentations/widgets/music_list_tile.dart';
 
-class ScreenSearch extends StatefulWidget {
-  const ScreenSearch({
+class ScreenSearch extends StatelessWidget {
+  ScreenSearch({
     required this.audioPlayer,
     super.key,
   });
   final AssetsAudioPlayer audioPlayer;
-  @override
-  State<ScreenSearch> createState() => _ScreenSearchState();
-}
-
-class _ScreenSearchState extends State<ScreenSearch> {
-  Box<Songs> songBox = getSongBox();
-  List<Songs> allSongs = [];
-  List<Songs> searchfoundSongs = [];
-
-  @override
-  void initState() {
-    super.initState();
-    allSongs = songBox.values.toList().cast<Songs>();
-    searchfoundSongs = List<Songs>.from(allSongs).toList().cast<Songs>();
-  }
+  final Box<Songs> songBox = getSongBox();
+  final List<Songs> allSongs = [];
+  final List<Songs> searchfoundSongs = [];
 
   @override
   Widget build(BuildContext context) {
-    void searchSong(String enteredSong) {
-      setState(() {
-        searchfoundSongs = allSongs
-            .where((song) =>
-                song.title.toLowerCase().contains(enteredSong.toLowerCase()))
-            .toList();
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<ScreenSearchBloc>(context).add(const InitialStateEvent());
+    });
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -79,7 +64,11 @@ class _ScreenSearchState extends State<ScreenSearch> {
                   ),
                   child: Center(
                     child: TextField(
-                      onChanged: (value) => searchSong(value),
+                      onChanged: (value) {
+                        BlocProvider.of<ScreenSearchBloc>(context).add(
+                          SearchStateEvent(enteredSong: value),
+                        );
+                      },
                       decoration: const InputDecoration(
                         prefixIcon: Icon(
                           Icons.search,
@@ -96,28 +85,31 @@ class _ScreenSearchState extends State<ScreenSearch> {
                   ),
                 ),
                 Expanded(
-                  child: (searchfoundSongs.isEmpty)
-                      ? const Center(
-                          child: Text(
-                            'No Songs Found',
-                            style: TextStyle(
-                              fontFamily: "acme",
-                              color: Colors.white,
-                              fontSize: 15,
+                    child: BlocBuilder<ScreenSearchBloc, ScreenSearchState>(
+                  builder: (context, state) {
+                    return state.searchfoundSongs.isEmpty
+                        ? const Center(
+                            child: Text(
+                              'No Songs Found',
+                              style: TextStyle(
+                                fontFamily: "acme",
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemBuilder: (context, index) {
-                            return ListTileMusic(
-                              audioPlayer: widget.audioPlayer,
-                              index: index,
-                              songList: searchfoundSongs,
-                            );
-                          },
-                          itemCount: searchfoundSongs.length,
-                        ),
-                ),
+                          )
+                        : ListView.builder(
+                            itemBuilder: (context, index) {
+                              return ListTileMusic(
+                                audioPlayer: audioPlayer,
+                                index: index,
+                                songList: state.searchfoundSongs,
+                              );
+                            },
+                            itemCount: state.searchfoundSongs.length,
+                          );
+                  },
+                )),
               ],
             ),
           ),

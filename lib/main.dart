@@ -5,6 +5,7 @@ import 'package:tunezz_pro/application/music_bloc/screen_music_bloc.dart';
 import 'package:tunezz_pro/application/screen_favorite/screen_favorite_bloc.dart';
 import 'package:tunezz_pro/application/screen_most/screen_most_bloc.dart';
 import 'package:tunezz_pro/application/screen_recent/screen_recent_bloc.dart';
+import 'package:tunezz_pro/application/search_bloc/screen_search_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/presentations/screens/screen_splash/screen_splash.dart';
 
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ScreenFavoriteBloc()),
         BlocProvider(create: (context) => ScreenRecentBloc()),
         BlocProvider(create: (context) => ScreenMostBloc()),
+        BlocProvider(create: (context) => ScreenSearchBloc()),
       ],
       child: MaterialApp(
         title: 'tunezz',

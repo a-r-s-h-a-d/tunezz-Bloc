@@ -62,22 +62,26 @@ class ListTileMusic extends StatelessWidget {
         itemBuilder: (context) => [
           PopupMenuItem(
             child: Center(
-              child: IconButton(
-                onPressed: () {
-                  BlocProvider.of<ScreenFavoriteBloc>(context)
-                      .add(const GetFavoriteList());
-                  FavFunction.addtoFavorites(
-                    context: context,
-                    id: songList[index].id,
+              child: BlocBuilder<ScreenFavoriteBloc, ScreenFavoriteState>(
+                builder: (context, state) {
+                  return IconButton(
+                    onPressed: () {
+                      BlocProvider.of<ScreenFavoriteBloc>(context)
+                          .add(const GetFavoriteList());
+                      FavFunction.addtoFavorites(
+                        context: context,
+                        id: songList[index].id,
+                      );
+                      FavFunction.isFav(id: songList[index].id);
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(
+                      FavFunction.isFav(id: songList[index].id),
+                      color: Colors.white,
+                      size: 35,
+                    ),
                   );
-                  FavFunction.isFav(id: songList[index].id);
-                  Navigator.of(context).pop();
                 },
-                icon: Icon(
-                  FavFunction.isFav(id: songList[index].id),
-                  color: Colors.white,
-                  size: 35,
-                ),
               ),
             ),
           ),
