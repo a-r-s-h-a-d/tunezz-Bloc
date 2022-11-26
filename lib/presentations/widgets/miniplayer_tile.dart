@@ -88,9 +88,7 @@ class ListTileMiniplayer extends StatelessWidget {
               direction: Axis.horizontal,
               textDirection: TextDirection.ltr,
               autoRepeat: true,
-              child: Text(
-                  // audioPlayer.getCurrentAudioTitle,
-                  myAudio.metas.title!,
+              child: Text(myAudio.metas.title!,
                   style: const TextStyle(
                       fontFamily: "acme",
                       color: Colors.white,

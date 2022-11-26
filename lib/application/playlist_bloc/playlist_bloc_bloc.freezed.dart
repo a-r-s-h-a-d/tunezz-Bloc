@@ -18,48 +18,39 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PlaylistBlocEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String oldPlaylistName, String newPlaylistName)
-        renamePlaylist,
-    required TResult Function() playlistListNames,
-    required TResult Function(String playlistName) songList,
+    required TResult Function() getPlaylistNames,
+    required TResult Function(String playlistName) getPlaylistSongs,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult? Function()? playlistListNames,
-    TResult? Function(String playlistName)? songList,
+    TResult? Function()? getPlaylistNames,
+    TResult? Function(String playlistName)? getPlaylistSongs,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult Function()? playlistListNames,
-    TResult Function(String playlistName)? songList,
+    TResult Function()? getPlaylistNames,
+    TResult Function(String playlistName)? getPlaylistSongs,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RenamePlaylist value) renamePlaylist,
-    required TResult Function(PlaylistListNames value) playlistListNames,
-    required TResult Function(SongList value) songList,
+    required TResult Function(GetPlaylistListNames value) getPlaylistNames,
+    required TResult Function(GetPlaylistSongs value) getPlaylistSongs,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RenamePlaylist value)? renamePlaylist,
-    TResult? Function(PlaylistListNames value)? playlistListNames,
-    TResult? Function(SongList value)? songList,
+    TResult? Function(GetPlaylistListNames value)? getPlaylistNames,
+    TResult? Function(GetPlaylistSongs value)? getPlaylistSongs,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RenamePlaylist value)? renamePlaylist,
-    TResult Function(PlaylistListNames value)? playlistListNames,
-    TResult Function(SongList value)? songList,
+    TResult Function(GetPlaylistListNames value)? getPlaylistNames,
+    TResult Function(GetPlaylistSongs value)? getPlaylistSongs,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -84,192 +75,35 @@ class _$PlaylistBlocEventCopyWithImpl<$Res, $Val extends PlaylistBlocEvent>
 }
 
 /// @nodoc
-abstract class _$$RenamePlaylistCopyWith<$Res> {
-  factory _$$RenamePlaylistCopyWith(
-          _$RenamePlaylist value, $Res Function(_$RenamePlaylist) then) =
-      __$$RenamePlaylistCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String oldPlaylistName, String newPlaylistName});
+abstract class _$$GetPlaylistListNamesCopyWith<$Res> {
+  factory _$$GetPlaylistListNamesCopyWith(_$GetPlaylistListNames value,
+          $Res Function(_$GetPlaylistListNames) then) =
+      __$$GetPlaylistListNamesCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$RenamePlaylistCopyWithImpl<$Res>
-    extends _$PlaylistBlocEventCopyWithImpl<$Res, _$RenamePlaylist>
-    implements _$$RenamePlaylistCopyWith<$Res> {
-  __$$RenamePlaylistCopyWithImpl(
-      _$RenamePlaylist _value, $Res Function(_$RenamePlaylist) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? oldPlaylistName = null,
-    Object? newPlaylistName = null,
-  }) {
-    return _then(_$RenamePlaylist(
-      oldPlaylistName: null == oldPlaylistName
-          ? _value.oldPlaylistName
-          : oldPlaylistName // ignore: cast_nullable_to_non_nullable
-              as String,
-      newPlaylistName: null == newPlaylistName
-          ? _value.newPlaylistName
-          : newPlaylistName // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$RenamePlaylist implements RenamePlaylist {
-  const _$RenamePlaylist(
-      {required this.oldPlaylistName, required this.newPlaylistName});
-
-  @override
-  final String oldPlaylistName;
-  @override
-  final String newPlaylistName;
-
-  @override
-  String toString() {
-    return 'PlaylistBlocEvent.renamePlaylist(oldPlaylistName: $oldPlaylistName, newPlaylistName: $newPlaylistName)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$RenamePlaylist &&
-            (identical(other.oldPlaylistName, oldPlaylistName) ||
-                other.oldPlaylistName == oldPlaylistName) &&
-            (identical(other.newPlaylistName, newPlaylistName) ||
-                other.newPlaylistName == newPlaylistName));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, oldPlaylistName, newPlaylistName);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$RenamePlaylistCopyWith<_$RenamePlaylist> get copyWith =>
-      __$$RenamePlaylistCopyWithImpl<_$RenamePlaylist>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String oldPlaylistName, String newPlaylistName)
-        renamePlaylist,
-    required TResult Function() playlistListNames,
-    required TResult Function(String playlistName) songList,
-  }) {
-    return renamePlaylist(oldPlaylistName, newPlaylistName);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult? Function()? playlistListNames,
-    TResult? Function(String playlistName)? songList,
-  }) {
-    return renamePlaylist?.call(oldPlaylistName, newPlaylistName);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult Function()? playlistListNames,
-    TResult Function(String playlistName)? songList,
-    required TResult orElse(),
-  }) {
-    if (renamePlaylist != null) {
-      return renamePlaylist(oldPlaylistName, newPlaylistName);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(RenamePlaylist value) renamePlaylist,
-    required TResult Function(PlaylistListNames value) playlistListNames,
-    required TResult Function(SongList value) songList,
-  }) {
-    return renamePlaylist(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RenamePlaylist value)? renamePlaylist,
-    TResult? Function(PlaylistListNames value)? playlistListNames,
-    TResult? Function(SongList value)? songList,
-  }) {
-    return renamePlaylist?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(RenamePlaylist value)? renamePlaylist,
-    TResult Function(PlaylistListNames value)? playlistListNames,
-    TResult Function(SongList value)? songList,
-    required TResult orElse(),
-  }) {
-    if (renamePlaylist != null) {
-      return renamePlaylist(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class RenamePlaylist implements PlaylistBlocEvent {
-  const factory RenamePlaylist(
-      {required final String oldPlaylistName,
-      required final String newPlaylistName}) = _$RenamePlaylist;
-
-  String get oldPlaylistName;
-  String get newPlaylistName;
-  @JsonKey(ignore: true)
-  _$$RenamePlaylistCopyWith<_$RenamePlaylist> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$PlaylistListNamesCopyWith<$Res> {
-  factory _$$PlaylistListNamesCopyWith(
-          _$PlaylistListNames value, $Res Function(_$PlaylistListNames) then) =
-      __$$PlaylistListNamesCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$PlaylistListNamesCopyWithImpl<$Res>
-    extends _$PlaylistBlocEventCopyWithImpl<$Res, _$PlaylistListNames>
-    implements _$$PlaylistListNamesCopyWith<$Res> {
-  __$$PlaylistListNamesCopyWithImpl(
-      _$PlaylistListNames _value, $Res Function(_$PlaylistListNames) _then)
+class __$$GetPlaylistListNamesCopyWithImpl<$Res>
+    extends _$PlaylistBlocEventCopyWithImpl<$Res, _$GetPlaylistListNames>
+    implements _$$GetPlaylistListNamesCopyWith<$Res> {
+  __$$GetPlaylistListNamesCopyWithImpl(_$GetPlaylistListNames _value,
+      $Res Function(_$GetPlaylistListNames) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$PlaylistListNames implements PlaylistListNames {
-  _$PlaylistListNames();
+class _$GetPlaylistListNames implements GetPlaylistListNames {
+  _$GetPlaylistListNames();
 
   @override
   String toString() {
-    return 'PlaylistBlocEvent.playlistListNames()';
+    return 'PlaylistBlocEvent.getPlaylistNames()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PlaylistListNames);
+        (other.runtimeType == runtimeType && other is _$GetPlaylistListNames);
   }
 
   @override
@@ -278,36 +112,30 @@ class _$PlaylistListNames implements PlaylistListNames {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String oldPlaylistName, String newPlaylistName)
-        renamePlaylist,
-    required TResult Function() playlistListNames,
-    required TResult Function(String playlistName) songList,
+    required TResult Function() getPlaylistNames,
+    required TResult Function(String playlistName) getPlaylistSongs,
   }) {
-    return playlistListNames();
+    return getPlaylistNames();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult? Function()? playlistListNames,
-    TResult? Function(String playlistName)? songList,
+    TResult? Function()? getPlaylistNames,
+    TResult? Function(String playlistName)? getPlaylistSongs,
   }) {
-    return playlistListNames?.call();
+    return getPlaylistNames?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult Function()? playlistListNames,
-    TResult Function(String playlistName)? songList,
+    TResult Function()? getPlaylistNames,
+    TResult Function(String playlistName)? getPlaylistSongs,
     required TResult orElse(),
   }) {
-    if (playlistListNames != null) {
-      return playlistListNames();
+    if (getPlaylistNames != null) {
+      return getPlaylistNames();
     }
     return orElse();
   }
@@ -315,56 +143,54 @@ class _$PlaylistListNames implements PlaylistListNames {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RenamePlaylist value) renamePlaylist,
-    required TResult Function(PlaylistListNames value) playlistListNames,
-    required TResult Function(SongList value) songList,
+    required TResult Function(GetPlaylistListNames value) getPlaylistNames,
+    required TResult Function(GetPlaylistSongs value) getPlaylistSongs,
   }) {
-    return playlistListNames(this);
+    return getPlaylistNames(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RenamePlaylist value)? renamePlaylist,
-    TResult? Function(PlaylistListNames value)? playlistListNames,
-    TResult? Function(SongList value)? songList,
+    TResult? Function(GetPlaylistListNames value)? getPlaylistNames,
+    TResult? Function(GetPlaylistSongs value)? getPlaylistSongs,
   }) {
-    return playlistListNames?.call(this);
+    return getPlaylistNames?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RenamePlaylist value)? renamePlaylist,
-    TResult Function(PlaylistListNames value)? playlistListNames,
-    TResult Function(SongList value)? songList,
+    TResult Function(GetPlaylistListNames value)? getPlaylistNames,
+    TResult Function(GetPlaylistSongs value)? getPlaylistSongs,
     required TResult orElse(),
   }) {
-    if (playlistListNames != null) {
-      return playlistListNames(this);
+    if (getPlaylistNames != null) {
+      return getPlaylistNames(this);
     }
     return orElse();
   }
 }
 
-abstract class PlaylistListNames implements PlaylistBlocEvent {
-  factory PlaylistListNames() = _$PlaylistListNames;
+abstract class GetPlaylistListNames implements PlaylistBlocEvent {
+  factory GetPlaylistListNames() = _$GetPlaylistListNames;
 }
 
 /// @nodoc
-abstract class _$$SongListCopyWith<$Res> {
-  factory _$$SongListCopyWith(
-          _$SongList value, $Res Function(_$SongList) then) =
-      __$$SongListCopyWithImpl<$Res>;
+abstract class _$$GetPlaylistSongsCopyWith<$Res> {
+  factory _$$GetPlaylistSongsCopyWith(
+          _$GetPlaylistSongs value, $Res Function(_$GetPlaylistSongs) then) =
+      __$$GetPlaylistSongsCopyWithImpl<$Res>;
   @useResult
   $Res call({String playlistName});
 }
 
 /// @nodoc
-class __$$SongListCopyWithImpl<$Res>
-    extends _$PlaylistBlocEventCopyWithImpl<$Res, _$SongList>
-    implements _$$SongListCopyWith<$Res> {
-  __$$SongListCopyWithImpl(_$SongList _value, $Res Function(_$SongList) _then)
+class __$$GetPlaylistSongsCopyWithImpl<$Res>
+    extends _$PlaylistBlocEventCopyWithImpl<$Res, _$GetPlaylistSongs>
+    implements _$$GetPlaylistSongsCopyWith<$Res> {
+  __$$GetPlaylistSongsCopyWithImpl(
+      _$GetPlaylistSongs _value, $Res Function(_$GetPlaylistSongs) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -372,7 +198,7 @@ class __$$SongListCopyWithImpl<$Res>
   $Res call({
     Object? playlistName = null,
   }) {
-    return _then(_$SongList(
+    return _then(_$GetPlaylistSongs(
       playlistName: null == playlistName
           ? _value.playlistName
           : playlistName // ignore: cast_nullable_to_non_nullable
@@ -383,22 +209,22 @@ class __$$SongListCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SongList implements SongList {
-  _$SongList({required this.playlistName});
+class _$GetPlaylistSongs implements GetPlaylistSongs {
+  _$GetPlaylistSongs({required this.playlistName});
 
   @override
   final String playlistName;
 
   @override
   String toString() {
-    return 'PlaylistBlocEvent.songList(playlistName: $playlistName)';
+    return 'PlaylistBlocEvent.getPlaylistSongs(playlistName: $playlistName)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SongList &&
+            other is _$GetPlaylistSongs &&
             (identical(other.playlistName, playlistName) ||
                 other.playlistName == playlistName));
   }
@@ -409,42 +235,36 @@ class _$SongList implements SongList {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SongListCopyWith<_$SongList> get copyWith =>
-      __$$SongListCopyWithImpl<_$SongList>(this, _$identity);
+  _$$GetPlaylistSongsCopyWith<_$GetPlaylistSongs> get copyWith =>
+      __$$GetPlaylistSongsCopyWithImpl<_$GetPlaylistSongs>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String oldPlaylistName, String newPlaylistName)
-        renamePlaylist,
-    required TResult Function() playlistListNames,
-    required TResult Function(String playlistName) songList,
+    required TResult Function() getPlaylistNames,
+    required TResult Function(String playlistName) getPlaylistSongs,
   }) {
-    return songList(playlistName);
+    return getPlaylistSongs(playlistName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult? Function()? playlistListNames,
-    TResult? Function(String playlistName)? songList,
+    TResult? Function()? getPlaylistNames,
+    TResult? Function(String playlistName)? getPlaylistSongs,
   }) {
-    return songList?.call(playlistName);
+    return getPlaylistSongs?.call(playlistName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String oldPlaylistName, String newPlaylistName)?
-        renamePlaylist,
-    TResult Function()? playlistListNames,
-    TResult Function(String playlistName)? songList,
+    TResult Function()? getPlaylistNames,
+    TResult Function(String playlistName)? getPlaylistSongs,
     required TResult orElse(),
   }) {
-    if (songList != null) {
-      return songList(playlistName);
+    if (getPlaylistSongs != null) {
+      return getPlaylistSongs(playlistName);
     }
     return orElse();
   }
@@ -452,44 +272,42 @@ class _$SongList implements SongList {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(RenamePlaylist value) renamePlaylist,
-    required TResult Function(PlaylistListNames value) playlistListNames,
-    required TResult Function(SongList value) songList,
+    required TResult Function(GetPlaylistListNames value) getPlaylistNames,
+    required TResult Function(GetPlaylistSongs value) getPlaylistSongs,
   }) {
-    return songList(this);
+    return getPlaylistSongs(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(RenamePlaylist value)? renamePlaylist,
-    TResult? Function(PlaylistListNames value)? playlistListNames,
-    TResult? Function(SongList value)? songList,
+    TResult? Function(GetPlaylistListNames value)? getPlaylistNames,
+    TResult? Function(GetPlaylistSongs value)? getPlaylistSongs,
   }) {
-    return songList?.call(this);
+    return getPlaylistSongs?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(RenamePlaylist value)? renamePlaylist,
-    TResult Function(PlaylistListNames value)? playlistListNames,
-    TResult Function(SongList value)? songList,
+    TResult Function(GetPlaylistListNames value)? getPlaylistNames,
+    TResult Function(GetPlaylistSongs value)? getPlaylistSongs,
     required TResult orElse(),
   }) {
-    if (songList != null) {
-      return songList(this);
+    if (getPlaylistSongs != null) {
+      return getPlaylistSongs(this);
     }
     return orElse();
   }
 }
 
-abstract class SongList implements PlaylistBlocEvent {
-  factory SongList({required final String playlistName}) = _$SongList;
+abstract class GetPlaylistSongs implements PlaylistBlocEvent {
+  factory GetPlaylistSongs({required final String playlistName}) =
+      _$GetPlaylistSongs;
 
   String get playlistName;
   @JsonKey(ignore: true)
-  _$$SongListCopyWith<_$SongList> get copyWith =>
+  _$$GetPlaylistSongsCopyWith<_$GetPlaylistSongs> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

@@ -15,6 +15,7 @@ class ScreenHome extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           iconTheme: const IconThemeData(color: Colors.white),

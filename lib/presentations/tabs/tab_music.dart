@@ -13,33 +13,38 @@ class Music extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 70),
+      padding: const EdgeInsets.only(
+        top: 10,
+        bottom: 70,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: BlocBuilder<ScreenMusicBloc, ScreenMusicState>(
-            builder: (context, state) {
-              return state.songList.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No Songs Found',
-                        style: TextStyle(
-                          fontFamily: "acme",
-                          color: Colors.white,
-                          fontSize: 15,
+          Expanded(
+            child: BlocBuilder<ScreenMusicBloc, ScreenMusicState>(
+              builder: (context, state) {
+                return state.songList.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'No Songs Found',
+                          style: TextStyle(
+                            fontFamily: "acme",
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
                         ),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemBuilder: (context, index) => ListTileMusic(
-                        audioPlayer: audioPlayer,
-                        songList: state.songList,
-                        index: index,
-                      ),
-                      itemCount: state.songList.length,
-                    );
-            },
-          )),
+                      )
+                    : ListView.builder(
+                        itemBuilder: (context, index) => ListTileMusic(
+                          audioPlayer: audioPlayer,
+                          songList: state.songList,
+                          index: index,
+                        ),
+                        itemCount: state.songList.length,
+                      );
+              },
+            ),
+          ),
         ],
       ),
     );

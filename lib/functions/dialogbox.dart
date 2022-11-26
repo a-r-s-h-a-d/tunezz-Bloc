@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tunezz_pro/application/playlist_bloc/playlist_bloc_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 
@@ -128,8 +130,9 @@ showPlaylistRenameAlertBox(BuildContext context, playlistname) {
             final keys = playlistBox.keys.toList();
             if (value == null || value.isEmpty) {
               return 'field is empty';
-            } else if (keys.contains(value)) {
-              return '$value is already existed in playlist';
+            }
+            if (keys.contains(value)) {
+              return 'type a new name';
             }
             return null;
           },
@@ -138,7 +141,6 @@ showPlaylistRenameAlertBox(BuildContext context, playlistname) {
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             border: InputBorder.none,
-            //hintText: playlistname,
             hintStyle: TextStyle(
               fontFamily: "acme",
               color: Colors.grey[50],
@@ -169,13 +171,21 @@ showPlaylistRenameAlertBox(BuildContext context, playlistname) {
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     newPlaylistName = textController.text.trim();
+
+                    List<Songs> newPlaylistSongs =
+                        playlistBox.get(playlistname)!.toList().cast<Songs>();
+                    await playlistBox.put(newPlaylistName, newPlaylistSongs);
+                    await playlistBox.delete(playlistname);
+                    // BlocProvider.of<PlaylistBlocBloc>(context)
+                    //     .add(RenamePlaylist(
+                    //   oldPlaylistName: playlistname,
+                    //   newPlaylistName: newPlaylistName,
+                    // ));
+                    BlocProvider.of<PlaylistBlocBloc>(context)
+                        .add(GetPlaylistListNames());
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
                   }
-                  List<Songs> newPlaylistSongs =
-                      playlistBox.get(playlistname)!.toList().cast<Songs>();
-                  await playlistBox.put(newPlaylistName, newPlaylistSongs);
-                  await playlistBox.delete(playlistname);
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
                 },
                 icon: const Icon(
                   Icons.check,
@@ -244,6 +254,8 @@ showPlaylistDeleteAlertBox(BuildContext context, playlistname) {
             TextButton.icon(
               onPressed: () {
                 playlistBox.delete(playlistname);
+                BlocProvider.of<PlaylistBlocBloc>(context)
+                    .add(GetPlaylistListNames());
                 Navigator.of(context).pop();
               },
               icon: const Icon(
@@ -314,6 +326,8 @@ showAddtoplaylistBox(BuildContext context, String id) {
                                 color: Colors.blueGrey, fontSize: 16),
                           ),
                           onPressed: () {
+                            BlocProvider.of<PlaylistBlocBloc>(context)
+                                .add(GetPlaylistListNames());
                             Box<Songs> songBox = getSongBox();
                             Box<List> playlistBox = getPlaylistBox();
                             List<Songs> sortedSongs =

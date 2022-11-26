@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tunezz_pro/application/music_bloc/screen_music_bloc.dart';
+import 'package:tunezz_pro/application/playlist_bloc/playlist_bloc_bloc.dart';
 import 'package:tunezz_pro/application/screen_favorite/screen_favorite_bloc.dart';
 import 'package:tunezz_pro/application/screen_most/screen_most_bloc.dart';
 import 'package:tunezz_pro/application/screen_recent/screen_recent_bloc.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ScreenMusicBloc()),
-        //BlocProvider(create: (context) => PlaylistBlocBloc()),
+        BlocProvider(create: (context) => PlaylistBlocBloc()),
         BlocProvider(create: (context) => ScreenFavoriteBloc()),
         BlocProvider(create: (context) => ScreenRecentBloc()),
         BlocProvider(create: (context) => ScreenMostBloc()),

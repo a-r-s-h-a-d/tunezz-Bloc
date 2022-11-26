@@ -1,64 +1,33 @@
-// ignore_for_file: must_be_immutable, use_build_context_synchronously
-
 import 'dart:developer';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:tunezz_pro/application/playlist_bloc/playlist_bloc_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 import 'package:tunezz_pro/presentations/widgets/miniplayer_tile.dart';
 
-class ViewPlaylistTile extends StatefulWidget {
-  const ViewPlaylistTile(
+class ViewPlaylistTile extends StatelessWidget {
+  ViewPlaylistTile(
       {required this.index,
       required this.songList,
-      //required this.audioPlayer,
       required this.playlistname,
       super.key});
   final int index;
-  final List<Songs> songList;
-  //final AssetsAudioPlayer audioPlayer;
+  List<Songs> songList;
   final String playlistname;
-
-  @override
-  State<ViewPlaylistTile> createState() => _ViewPlaylistTileState();
-}
-
-class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
   final AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.withId('0');
-  // static final Box<List> playlistBox = getPlaylistBox();
-  // static final Box<Songs> songBox = getSongBox();
-  List<Audio>? audioList = [];
-
-  // void convertsongtoaudio() {
-  //   for (var song in widget.songList) {
-  //     audioList!.add(
-  //       Audio.file(
-  //         song.songPath,
-  //         metas: Metas(
-  //           id: song.id.toString(),
-  //           title: song.title,
-  //           artist: song.artist,
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
-
-  @override
-  void initState() {
-    //convertsongtoaudio();
-    super.initState();
-  }
+  final List<Audio>? audioList = [];
 
   @override
   Widget build(BuildContext context) {
+    final Box<List> playlistBox = getPlaylistBox();
+    final Box<Songs> songBox = getSongBox();
     return InkWell(
       onTap: () {
-        log('open from playlist');
-        log(widget.songList[widget.index].title);
         showBottomSheet(
           context: context,
           builder: (context) {
@@ -74,8 +43,8 @@ class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
                 ),
                 child: ListTileMiniplayer(
                   audioPlayer: audioPlayer,
-                  songList: widget.songList,
-                  index: widget.index,
+                  songList: songList,
+                  index: index,
                 ),
               ),
             );
@@ -84,7 +53,7 @@ class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
       },
       child: ListTile(
         leading: QueryArtworkWidget(
-          id: int.parse(widget.songList[widget.index].id),
+          id: int.parse(songList[index].id),
           type: ArtworkType.AUDIO,
           nullArtworkWidget: Container(
             decoration: const BoxDecoration(
@@ -97,7 +66,7 @@ class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
           ),
         ),
         title: Text(
-          widget.songList[widget.index].title,
+          songList[index].title,
           style: const TextStyle(
               fontFamily: "acme",
               color: Colors.white,
@@ -105,9 +74,9 @@ class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
               fontSize: 17),
         ),
         subtitle: Text(
-          widget.songList[widget.index].artist == "<unknown>"
+          songList[index].artist == "<unknown>"
               ? "Unknown Artist"
-              : widget.songList[widget.index].artist,
+              : songList[index].artist,
           style: const TextStyle(
               fontFamily: "lato",
               color: Colors.white,
@@ -120,20 +89,21 @@ class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
             color: Colors.red,
           ),
           onPressed: () async {
-            //audioPlayer.stop();
+            log('Delete button pressed');
 
-            widget.songList.removeWhere((song) =>
-                song.id == widget.songList[widget.index].id.toString());
-            await getPlaylistBox().put(widget.playlistname, widget.songList);
+            List<Songs> playlistSongs =
+                playlistBox.get(playlistname)!.toList().cast<Songs>();
+            List<Songs> allSongs = songBox.values.toList().cast<Songs>();
 
-            var snackdemo = SnackBar(
-              content: Text(
-                  '${audioList![widget.index].metas.title} removed from playlist'),
-              backgroundColor: Colors.red,
-              duration: const Duration(seconds: 1),
-              elevation: 10,
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackdemo);
+            Songs song = allSongs.firstWhere(
+                (element) => element.id.contains(playlistSongs[index].id));
+
+            playlistSongs.removeWhere(
+                (element) => element.id == playlistSongs[index].id);
+
+            await playlistBox.put(playlistname, playlistSongs);
+            BlocProvider.of<PlaylistBlocBloc>(context)
+                .add(GetPlaylistSongs(playlistName: playlistname));
           },
         ),
       ),
@@ -142,8 +112,8 @@ class _ViewPlaylistTileState extends State<ViewPlaylistTile> {
 }
 
 //Add songs to the current playlist through Bottomsheet
-class AddSongCurrentPlaylist extends StatefulWidget {
-  const AddSongCurrentPlaylist({
+class AddSongCurrentPlaylist extends StatelessWidget {
+  AddSongCurrentPlaylist({
     required this.songList,
     required this.index,
     required this.playlistname,
@@ -153,69 +123,43 @@ class AddSongCurrentPlaylist extends StatefulWidget {
   final int index;
   final String playlistname;
 
-  @override
-  State<AddSongCurrentPlaylist> createState() => _AddSongCurrentPlaylistState();
-}
-
-class _AddSongCurrentPlaylistState extends State<AddSongCurrentPlaylist> {
-  bool toggle = false;
-  Box<List> playlistBox = getPlaylistBox();
+  final Box<List> playlistBox = getPlaylistBox();
 
   @override
   Widget build(BuildContext context) {
     List<Songs> playlistSongsList =
-        playlistBox.get(widget.playlistname)!.toList().cast<Songs>();
-    Songs currentsong = widget.songList.firstWhere(
-        (song) => song.id.contains(widget.songList[widget.index].id));
+        playlistBox.get(playlistname)!.toList().cast<Songs>();
+    Songs currentsong =
+        songList.firstWhere((song) => song.id.contains(songList[index].id));
     return ListTile(
       leading: QueryArtworkWidget(
-        id: int.parse(widget.songList[widget.index].id),
+        id: int.parse(songList[index].id),
         type: ArtworkType.AUDIO,
         nullArtworkWidget: const Icon(
           Icons.music_note,
           color: Colors.white,
         ),
       ),
-      title: Text(widget.songList[widget.index].title,
-          style: const TextStyle(
-              fontFamily: "acme",
-              color: Colors.white,
-              overflow: TextOverflow.ellipsis,
-              fontWeight: FontWeight.bold,
-              fontSize: 15)),
-      trailing: IconButton(
-          icon: playlistSongsList
-                  .where((song) => song.id.contains(currentsong.id))
-                  .isNotEmpty
-              ? const Icon(
-                  Icons.remove_circle_outline,
-                  color: Colors.red,
-                  size: 30,
-                )
-              : const Icon(
-                  Icons.add_circle_outline,
-                  color: Colors.green,
-                  size: 30,
-                ),
-          onPressed: () {
-            setState(() {
-              // Here we changing the icon.
-              List<Songs> playlistSongsList =
-                  playlistBox.get(widget.playlistname)!.toList().cast<Songs>();
-              Songs currentsong = widget.songList.firstWhere(
-                  (song) => song.id.contains(widget.songList[widget.index].id));
-              if (playlistSongsList
-                  .where((song) => song.id.contains(currentsong.id))
-                  .isEmpty) {
-                playlistSongsList.add(currentsong);
-                playlistBox.put(widget.playlistname, playlistSongsList);
-              } else {
-                playlistSongsList
-                    .removeWhere((song) => song.id.contains(currentsong.id));
-                playlistBox.put(widget.playlistname, playlistSongsList);
-              }
-            });
-          }),
+      title: GestureDetector(
+        onTap: () {
+          if (playlistSongsList
+              .where((song) => song.id.contains(currentsong.id))
+              .isEmpty) {
+            playlistSongsList.add(currentsong);
+            playlistBox.put(playlistname, playlistSongsList);
+          }
+          Navigator.of(context).pop();
+          BlocProvider.of<PlaylistBlocBloc>(context)
+              .add(GetPlaylistSongs(playlistName: playlistname));
+        },
+        child: Text(songList[index].title,
+            style: const TextStyle(
+                fontFamily: "acme",
+                color: Colors.white,
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.bold,
+                fontSize: 15)),
+      ),
     );
   }
 }

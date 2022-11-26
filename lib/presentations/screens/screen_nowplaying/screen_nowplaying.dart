@@ -3,6 +3,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:tunezz_pro/application/playlist_bloc/playlist_bloc_bloc.dart';
 import 'package:tunezz_pro/application/screen_favorite/screen_favorite_bloc.dart';
 import 'package:tunezz_pro/constants/color_palette/background_colors.dart';
 import 'package:tunezz_pro/functions/dialogbox.dart';
@@ -61,7 +62,6 @@ class NowPlaying extends StatelessWidget {
       return ProgressBar(
         progress: realtimePlayingInfos.currentPosition,
         total: realtimePlayingInfos.duration,
-        //timeLabelPadding: MediaQuery.of(context).size.height * 0.0,
         timeLabelTextStyle: const TextStyle(color: Colors.grey),
         onSeek: (value) {
           audioPlayer.seek(value);
@@ -176,86 +176,85 @@ class NowPlaying extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: nowplayingColor(),
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.1),
-                        QueryArtworkWidget(
-                          id: int.parse(myAudio.metas.id!),
-                          type: ArtworkType.AUDIO,
-                          artworkHeight:
-                              MediaQuery.of(context).size.height * 0.35,
-                          artworkWidth: MediaQuery.of(context).size.width * 0.8,
-                          artworkFit: BoxFit.fill,
-                          nullArtworkWidget: Icon(
-                            Icons.music_note,
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1),
+                      QueryArtworkWidget(
+                        id: int.parse(myAudio.metas.id!),
+                        type: ArtworkType.AUDIO,
+                        artworkHeight:
+                            MediaQuery.of(context).size.height * 0.35,
+                        artworkWidth: MediaQuery.of(context).size.width * 0.8,
+                        artworkFit: BoxFit.fill,
+                        nullArtworkWidget: Icon(
+                          Icons.music_note,
+                          color: Colors.white,
+                          size: MediaQuery.of(context).size.height * 0.35,
+                        ),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.05),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: ListTile(
+                          leading: BlocBuilder<ScreenFavoriteBloc,
+                              ScreenFavoriteState>(
+                            builder: (context, state) {
+                              return IconButton(
+                                  icon: Icon(
+                                    FavFunction.isFav(
+                                        id: myAudio.metas.id.toString()),
+                                    size: 40,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    BlocProvider.of<ScreenFavoriteBloc>(context)
+                                        .add(const GetFavoriteList());
+                                    FavFunction.addtoFavorites(
+                                        context: context,
+                                        id: myAudio.metas.id.toString());
+                                  });
+                            },
+                          ),
+                          title: title(audioPlayer, context),
+                          subtitle: artist(audioPlayer),
+                          trailing: IconButton(
+                            onPressed: () {
+                              BlocProvider.of<PlaylistBlocBloc>(context)
+                                  .add(GetPlaylistListNames());
+                              showAddtoplaylistBox(
+                                  context, myAudio.metas.id.toString());
+                            },
+                            icon: const Icon(Icons.add_box_outlined),
+                            iconSize: 35,
                             color: Colors.white,
-                            size: MediaQuery.of(context).size.height * 0.3,
                           ),
                         ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.05),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: ListTile(
-                            leading: BlocBuilder<ScreenFavoriteBloc,
-                                ScreenFavoriteState>(
-                              builder: (context, state) {
-                                return IconButton(
-                                    icon: Icon(
-                                      FavFunction.isFav(
-                                          id: myAudio.metas.id.toString()),
-                                      size: 40,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      BlocProvider.of<ScreenFavoriteBloc>(
-                                              context)
-                                          .add(const GetFavoriteList());
-                                      FavFunction.addtoFavorites(
-                                          context: context,
-                                          id: myAudio.metas.id.toString());
-                                    });
-                              },
-                            ),
-                            title: title(audioPlayer, context),
-                            subtitle: artist(audioPlayer),
-                            trailing: IconButton(
-                              onPressed: () {
-                                showAddtoplaylistBox(
-                                    context, myAudio.metas.id.toString());
-                              },
-                              icon: const Icon(Icons.add_box_outlined),
-                              iconSize: 35,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ],
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.04,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.height * 0.04,
+                        right: MediaQuery.of(context).size.height * 0.04,
+                        top: MediaQuery.of(context).size.height * 0.02),
+                    child: myprogresbar(audioPlayer),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.height * 0.03,
+                      right: MediaQuery.of(context).size.height * 0.03,
+                      top: MediaQuery.of(context).size.height * 0.01,
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.04,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.height * 0.04,
-                          right: MediaQuery.of(context).size.height * 0.04,
-                          top: MediaQuery.of(context).size.height * 0.02),
-                      child: myprogresbar(audioPlayer),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.height * 0.03,
-                        right: MediaQuery.of(context).size.height * 0.03,
-                        top: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      child: songoptions(audioPlayer),
-                    ),
-                  ],
-                ),
+                    child: songoptions(audioPlayer),
+                  ),
+                ],
               ),
             );
           },

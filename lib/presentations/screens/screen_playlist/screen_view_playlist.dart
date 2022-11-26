@@ -1,10 +1,13 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tunezz_pro/application/playlist_bloc/playlist_bloc_bloc.dart';
 import 'package:tunezz_pro/constants/color_palette/background_colors.dart';
-import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 import 'package:tunezz_pro/presentations/widgets/view_add_playlist_song.dart';
+
+import '../../../application/music_bloc/screen_music_bloc.dart';
 
 class ViewPlaylist extends StatelessWidget {
   ViewPlaylist(
@@ -16,6 +19,10 @@ class ViewPlaylist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<PlaylistBlocBloc>(context)
+          .add(GetPlaylistSongs(playlistName: playlistname));
+    });
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -41,30 +48,27 @@ class ViewPlaylist extends StatelessWidget {
         elevation: 0,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: bgColor(),
-        ),
-        child: ValueListenableBuilder(
-          valueListenable: playlistBox.listenable(),
-          builder:
-              (BuildContext context, Box<List> playlistBox, Widget? child) {
-            final List<Songs> songList =
-                playlistBox.get(playlistname)!.toList().cast();
-            return ListView.builder(
-              itemCount: songList.length,
-              itemBuilder: (context, index) {
-                return ViewPlaylistTile(
-                  index: index,
-                  songList: songList,
-                  playlistname: playlistname,
-                );
-              },
-            );
-          },
-        ),
-      ),
+          decoration: BoxDecoration(
+            gradient: bgColor(),
+          ),
+          child: BlocBuilder<PlaylistBlocBloc, PlaylistBlocState>(
+            builder: (context, state) {
+              return ListView.builder(
+                itemCount: state.playlistSongList.length,
+                itemBuilder: (context, index) {
+                  return ViewPlaylistTile(
+                    index: index,
+                    songList: state.playlistSongList,
+                    playlistname: state.playlistName,
+                  );
+                },
+              );
+            },
+          )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          BlocProvider.of<PlaylistBlocBloc>(context)
+              .add(GetPlaylistListNames());
           showModalBottomSheet(
               context: context,
               builder: (builder) {
@@ -79,17 +83,13 @@ class ViewPlaylist extends StatelessWidget {
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10.0),
                                 topRight: Radius.circular(10.0))),
-                        child: ValueListenableBuilder(
-                          valueListenable: getSongBox().listenable(),
-                          builder: (context, value, child) {
-                            Box<Songs> songBox = getSongBox();
-                            List<Songs> sortedSongs =
-                                songBox.values.toList().cast<Songs>();
+                        child: BlocBuilder<ScreenMusicBloc, ScreenMusicState>(
+                          builder: (context, state) {
                             return ListView.builder(
-                              itemCount: sortedSongs.length,
+                              itemCount: state.songList.length,
                               itemBuilder: (context, index) {
                                 return AddSongCurrentPlaylist(
-                                  songList: sortedSongs,
+                                  songList: state.songList,
                                   index: index,
                                   playlistname: playlistname,
                                 );

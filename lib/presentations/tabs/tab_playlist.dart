@@ -1,6 +1,8 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tunezz_pro/application/playlist_bloc/playlist_bloc_bloc.dart';
 import 'package:tunezz_pro/domain/data_model/songs.dart';
 import 'package:tunezz_pro/domain/db_functions/db_functions.dart';
 import 'package:tunezz_pro/functions/dialogbox.dart';
@@ -139,6 +141,8 @@ class PlaylistTab extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
+                  BlocProvider.of<PlaylistBlocBloc>(context)
+                      .add(GetPlaylistListNames());
                   showPlaylistAddAlertBox(context);
                 },
                 icon: const Icon(Icons.add),
@@ -148,29 +152,33 @@ class PlaylistTab extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          ValueListenableBuilder(
-            valueListenable: playlistBox.listenable(),
-            builder:
-                (BuildContext context, Box<List> playlistBox, Widget? child) {
-              List keys = playlistBox.keys.toList();
-              keys.remove('Favorites');
-              keys.remove('MostPlayed');
-              keys.remove('Recents');
-              return ListView.builder(
-                itemCount: keys.length,
-                shrinkWrap: true,
-                physics: const ScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final String playlistName = keys[index];
-                  final List<Songs> songList =
-                      playlistBox.get(playlistName)!.toList().cast<Songs>();
-                  return PlaylistTile(
-                    playlistname: playlistName,
-                    songlength: songList.length,
-                    audioPlayer: audioPlayer,
-                  );
-                },
+          BlocBuilder<PlaylistBlocBloc, PlaylistBlocState>(
+            builder: (context, state) {
+              BlocProvider.of<PlaylistBlocBloc>(context).add(
+                GetPlaylistListNames(),
               );
+              return state.playlistListNames.isEmpty
+                  ? const Center(
+                      child: Text('The List is Empty'),
+                    )
+                  : ListView.builder(
+                      itemCount: state.playlistListNames.length,
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final String playlistName =
+                            state.playlistListNames[index];
+                        final List<Songs> songList = playlistBox
+                            .get(playlistName)!
+                            .toList()
+                            .cast<Songs>();
+                        return PlaylistTile(
+                          playlistname: playlistName,
+                          songlength: songList.length,
+                          audioPlayer: audioPlayer,
+                        );
+                      },
+                    );
             },
           )
         ],

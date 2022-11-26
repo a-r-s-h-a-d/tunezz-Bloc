@@ -50,8 +50,7 @@ class ScreenSearch extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding:
-                const EdgeInsets.only(bottom: 70, top: 10, left: 10, right: 10),
+            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
             child: Column(
               children: [
                 Container(
@@ -63,7 +62,8 @@ class ScreenSearch extends StatelessWidget {
                     borderRadius: const BorderRadius.all(Radius.circular(15)),
                   ),
                   child: Center(
-                    child: TextField(
+                    child: TextFormField(
+                      textInputAction: TextInputAction.done,
                       onChanged: (value) {
                         BlocProvider.of<ScreenSearchBloc>(context).add(
                           SearchStateEvent(enteredSong: value),
@@ -84,32 +84,33 @@ class ScreenSearch extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
-                    child: BlocBuilder<ScreenSearchBloc, ScreenSearchState>(
+                BlocBuilder<ScreenSearchBloc, ScreenSearchState>(
                   builder: (context, state) {
-                    return state.searchfoundSongs.isEmpty
-                        ? const Center(
-                            child: Text(
-                              'No Songs Found',
-                              style: TextStyle(
-                                fontFamily: "acme",
-                                color: Colors.white,
-                                fontSize: 15,
+                    return Expanded(
+                      child: state.searchfoundSongs.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No Songs Found',
+                                style: TextStyle(
+                                  fontFamily: "acme",
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
                               ),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (context, index) {
+                                return ListTileMusic(
+                                  audioPlayer: audioPlayer,
+                                  index: index,
+                                  songList: state.searchfoundSongs,
+                                );
+                              },
+                              itemCount: state.searchfoundSongs.length,
                             ),
-                          )
-                        : ListView.builder(
-                            itemBuilder: (context, index) {
-                              return ListTileMusic(
-                                audioPlayer: audioPlayer,
-                                index: index,
-                                songList: state.searchfoundSongs,
-                              );
-                            },
-                            itemCount: state.searchfoundSongs.length,
-                          );
+                    );
                   },
-                )),
+                ),
               ],
             ),
           ),
