@@ -2,10 +2,10 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tunezz_pro/constants/color_palette/background_colors.dart';
-import 'package:tunezz_pro/presentations/screens/screen_privacy&conditions/screen_privacy_conditions.dart';
 import 'package:tunezz_pro/constants/text/privacy_policy.dart';
-import 'package:tunezz_pro/presentations/screens/screen_settings/widgets/settings_tile.dart';
 import 'package:tunezz_pro/constants/text/terms&conditions.dart';
+import 'package:tunezz_pro/presentations/screens/screen_privacy&conditions/screen_privacy_conditions.dart';
+import 'package:tunezz_pro/presentations/screens/screen_settings/widgets/settings_tile.dart';
 
 class ScreenSettings extends StatelessWidget {
   ScreenSettings({super.key});
@@ -114,10 +114,10 @@ class ScreenSettings extends StatelessWidget {
                   )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
+              const Padding(
+                padding: EdgeInsets.all(15.0),
                 child: Column(
-                  children: const [
+                  children: [
                     Text(
                       'Version 1.0',
                       style: TextStyle(
